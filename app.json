@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "historical-places",
+    "scheme": "com.empade.historicalplaces",
     "slug": "historical-places",
     "version": "1.0.0",
     "orientation": "portrait",

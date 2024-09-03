@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "jsx": "react-native",
+    "lib": ["es5", "es6", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@Api/*": ["api/*"],
+      "@Assets/*": ["assets/*"],
+      "@Components/*": ["App/Components/*"],
+      "@Screens/*": ["App/Screens/*"],
+      "@Store/*": ["App/Store/*"]
+    },
+    "types": ["nativewind/types"]
+  },
+  "extends": "@tsconfig/react-native/tsconfig.json"
+}
