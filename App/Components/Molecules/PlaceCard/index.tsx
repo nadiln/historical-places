@@ -6,11 +6,16 @@ import RemixIcon from "react-native-remix-icon";
 type PlaceCardProps = {
   place: Place;
   onMarkAsVisited: (placeId: number) => void;
+  navigateToDetailScreen: () => void;
 };
 
-export default function PlaceCard({ place, onMarkAsVisited }: PlaceCardProps) {
+export default function PlaceCard({
+  place,
+  onMarkAsVisited,
+  navigateToDetailScreen,
+}: PlaceCardProps) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => navigateToDetailScreen()}>
       <View className="flex-col m-3 bg-white rounded-2xl">
         <Image
           resizeMode="center"

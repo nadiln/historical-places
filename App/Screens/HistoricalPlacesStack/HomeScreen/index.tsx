@@ -5,8 +5,13 @@ import { useHistoricalPlaces } from "@Store/HistoricalPlacesCtx";
 import { fetchHistoricalPlaces } from "@Api/historicalPlaces";
 import ScreenSurface from "@Components/Atoms/ScreenSurface";
 import NavigationTopBar from "@Components/Atoms/NavigationTopBar";
+import { useNavigation } from "@react-navigation/native";
+import { HistoricalPlacesStackProps, HistoricalPlaceStackParamList } from "..";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type HomeScreenProps = {};
+type HomeScreenProps = {
+  navigation: NativeStackNavigationProp<HistoricalPlaceStackParamList, "HomeScreen">;
+};
 
 export type Place = {
   id: number;
@@ -18,8 +23,8 @@ export type Place = {
 
 type Places = Place[];
 
-export default function HomeScreen({}: HomeScreenProps) {
-  const { places, markVisited } = useHomeScreen();
+export default function HomeScreen({ navigation }: HomeScreenProps) {
+  const { places, markVisited, navigateToDetailScreen } = useHomeScreen(navigation);
   // console.log("places", places?.length);
 
   const renderItem = ({ item }: { item: Place }) => {
@@ -33,6 +38,7 @@ export default function HomeScreen({}: HomeScreenProps) {
           isVisited: item.isVisited,
         }}
         onMarkAsVisited={markVisited}
+        navigateToDetailScreen={navigateToDetailScreen}
       />
     );
   };
@@ -49,7 +55,9 @@ export default function HomeScreen({}: HomeScreenProps) {
               keyExtractor={(item) => item.id.toString()}
             />
           ) : (
-            <Text>No data available</Text>
+            <View className=" justify-center items-center">
+              <Text>Loading...</Text>
+            </View>
           )}
         </View>
       </View>
@@ -57,7 +65,11 @@ export default function HomeScreen({}: HomeScreenProps) {
   );
 }
 
-function useHomeScreen() {
+type UseHomeScreenProps = {
+  navigation: HomeScreenProps["navigation"];
+};
+
+function useHomeScreen(navigation: HomeScreenProps["navigation"]) {
   const { places, setHistoricalPlaces, setPlaces } = useHistoricalPlaces();
 
   const markVisited = (id: number) => {
@@ -90,8 +102,13 @@ function useHomeScreen() {
       }
     })();
   }, [places]);
+
+  const navigateToDetailScreen = () => {
+    navigation.navigate("DetailScreen");
+  };
   return {
     places,
     markVisited,
+    navigateToDetailScreen,
   };
 }
