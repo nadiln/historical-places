@@ -6,19 +6,21 @@ type NavigationTopBarProps = {
   showBackButton?: boolean;
   backAction?: () => void;
 };
-export default function NavigationTopBar({ title, showBackButton = false }: NavigationTopBarProps) {
+export default function NavigationTopBar({
+  title,
+  showBackButton = false,
+  backAction,
+}: NavigationTopBarProps) {
   return (
-    <View className="mt-5 mb-3  items-center justify-center">
+    <View className="flex-row items-start mx-5 mt-5 mb-3">
       {showBackButton && (
         <View className="flex-row items-center">
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={backAction}>
             <RemixIcon name="arrow-left-s-line" size={24} color="#000" />
           </TouchableOpacity>
         </View>
       )}
-      <Text className="ml-2 text-lg font-semibold font-bold items-center text-center ">
-        {title}
-      </Text>
+      <Text className="items-center ml-2 text-lg font-bold text-center ">{title}</Text>
     </View>
   );
 }

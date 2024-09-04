@@ -24,27 +24,27 @@ export type Place = {
 type Places = Place[];
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
-  const { places, markVisited, navigateToDetailScreen } = useHomeScreen(navigation);
+  const { places, updatedVisitedStatus, navigateToDetailScreen } = useHomeScreen(navigation);
   // console.log("places", places?.length);
 
   const renderItem = ({ item }: { item: Place }) => {
     return (
       <PlaceCard
         place={{
-          image: "https://via.placeholder.com/150",
+          image: item.image,
           title: item.title.substring(0, 20) + "...",
           description: item.description.substring(0, 50) + "...",
           id: item.id,
           isVisited: item.isVisited,
         }}
-        onMarkAsVisited={markVisited}
+        updatedVisitedStatus={updatedVisitedStatus}
         navigateToDetailScreen={navigateToDetailScreen}
       />
     );
   };
   return (
     <ScreenSurface>
-      <View className=" bg-gray-200">
+      <View className="bg-gray-200 ">
         <NavigationTopBar title="Historical Places" />
 
         <View className="mb-44 ">
@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               keyExtractor={(item) => item.id.toString()}
             />
           ) : (
-            <View className=" justify-center items-center">
+            <View className="items-center justify-center ">
               <Text>Loading...</Text>
             </View>
           )}
@@ -72,7 +72,7 @@ type UseHomeScreenProps = {
 function useHomeScreen(navigation: HomeScreenProps["navigation"]) {
   const { places, setHistoricalPlaces, setPlaces } = useHistoricalPlaces();
 
-  const markVisited = (id: number) => {
+  const updatedVisitedStatus = (id: number) => {
     // console.log("-------- id", id);
 
     const updatedPlaces = places?.map((place: Place) => {
@@ -103,12 +103,14 @@ function useHomeScreen(navigation: HomeScreenProps["navigation"]) {
     })();
   }, [places]);
 
-  const navigateToDetailScreen = () => {
-    navigation.navigate("DetailScreen");
+  const navigateToDetailScreen = (id: number) => {
+    const selectedPlace = places?.find((place) => place.id === id);
+    if (!selectedPlace) return;
+    navigation.navigate("DetailScreen", { place: selectedPlace });
   };
   return {
     places,
-    markVisited,
+    updatedVisitedStatus,
     navigateToDetailScreen,
   };
 }
